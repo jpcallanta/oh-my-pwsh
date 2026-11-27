@@ -81,16 +81,14 @@ oh-my-pwsh/
 │   ├── git-helpers.ps1           # Git shortcuts (gs, ga, gc, gp, ...)
 │   ├── psreadline.ps1            # PSReadLine configuration
 │   ├── environment.ps1           # PATH & environment variables
-│   ├── cc/                       # Claude Code CLI (cc blocks + cc plan)
+│   ├── cc/                       # Claude Code CLI (cc plan)
 │   │   ├── main.ps1              # Entry point, shared helpers
-│   │   ├── blocks.ps1            # Block scheduler subcommands
 │   │   └── plan.ps1              # Scheduled task subcommands
 │   └── ssh-sleep-blocker/        # Keep Windows awake during SSH sessions
 │       └── main.ps1              # CLI (setup/status/logs/...)
 ├── scripts/
 │   ├── install-dependencies.ps1  # Automatic dependency installer
 │   ├── cc/                       # cc daemon scripts (Task Scheduler)
-│   │   ├── blocks-daemon.ps1     # Block trigger daemon
 │   │   └── plan-daemon.ps1       # Plan executor daemon
 │   └── ssh-sleep-blocker/        # SSH sleep blocker daemon
 │       ├── daemon.ps1            # Polls port 22, toggles SetThreadExecutionState
@@ -339,15 +337,27 @@ find pattern    # Uses fd (faster file finding)
 git diff        # Uses delta (beautiful diffs)
 ```
 
-### Claude Code CLI (`cc`)
+### Power Tools
 
-Two namespaces: `cc blocks` (auto-trigger 5h usage blocks) and `cc plan` (schedule overnight Claude tasks).
+Use `power` to schedule sleep, hibernate, shutdown, and restart actions, or
+temporarily prevent automatic system sleep without changing the active Windows
+power plan:
 
 ```powershell
-cc blocks setup                    # Interactive setup
-cc blocks status                   # Show schedule & last trigger
-cc blocks schedule apply zentala   # Apply preset schedule
+awake                    # Toggle keep-awake mode
+awake status             # Show the current state
+awake off                # Restore normal sleep behavior
+power awake on            # Block automatic system sleep
+power                   # Interactive menu
 ```
+
+The keep-awake request applies to the current PowerShell session and is cleared
+when the session exits. It does not prevent manually choosing Sleep/Hibernate,
+turn off the display, or change the Windows power-plan settings.
+
+### Claude Code CLI (`cc`)
+
+One namespace: `cc plan` (schedule overnight Claude tasks).
 
 **Schedule overnight Claude tasks** — wake the PC, run Claude with a prompt in a specific directory:
 
